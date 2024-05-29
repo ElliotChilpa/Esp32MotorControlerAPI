@@ -1,0 +1,6 @@
+
+Bueno para que el programa funcione, jalamos la IP y como si fuese
+un servicio web la pegamos en la pagina web y posteriormente pones
+ejemplo:
+192.168.100.137/gpio/0 ó /gpio/1
+

@@ -1,31 +1,30 @@
-#include "ESP8266WiFi.h"
+// Definición de pines
+const int potPin = A0; // Pin analógico A0
+const int ledPin = 2; // Pin digital D1 (GPIO5) para el LED
 
-void setup()
-   {   Serial.begin(115200);
-       WiFi.mode(WIFI_STA);
-       WiFi.disconnect();
-       delay(100);
-       Serial.println("Configuracion completa");
-   }                   
+void setup() {
+  // Inicializar el pin del LED como salida
+  pinMode(ledPin, OUTPUT);
+  // Inicializar la comunicación serial para monitorear valores
+  Serial.begin(115200);
+}
 
-void loop()
-{
-  int n = WiFi.scanNetworks();
-  if (n == 0)
-  Serial.println("No encuentro redes disponibles");
-  Serial.print(n);
-  Serial.println(" networks found");
-
-
-  for (int i = 0; i < n; ++i)
-  {  // Print SSID y RSSI para cada una
-    Serial.print(i + 1);
-    Serial.print(": ");
-    Serial.print(WiFi.SSID(i));
-    Serial.print(" (");
-    Serial.print(WiFi.RSSI(i));
-    Serial.print(")");
-    Serial.println((WiFi.encryptionType(i) == ENC_TYPE_NONE)?" ":"*");
-    delay(10);
-  }
+void loop() {
+  // Leer el valor del potenciómetro
+  int potValue = analogRead(potPin);
+  
+  // Mapear el valor leído (0-1023) a un rango adecuado para PWM (0-255)
+  int brightness = map(potValue, 0, 1023, 0, 255);
+  
+  // Ajustar el brillo del LED usando PWM
+  analogWrite(ledPin, brightness);
+  
+  // Imprimir el valor leído en el monitor serial
+  Serial.print("Potentiometer Value: ");
+  Serial.print(potValue);
+  Serial.print(" - LED Brightness: ");
+  Serial.println(brightness);
+  
+  // Esperar un pequeño intervalo antes de la siguiente lectura
+  delay(100);
 }
